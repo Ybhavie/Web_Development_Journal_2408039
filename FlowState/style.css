@@ -1,0 +1,684 @@
+/**
+ * 1. DESIGN SYSTEM & ROOT VARIABLES
+ * I use CSS variables to create a 'Single Source of Truth'. 
+ * This ensures color consistency and allows for instant global 
+ * theme updates (like changing the primary purple) from one place.
+ */
+:root {
+  --navy-deep:    #050818;
+  --navy-mid:     #0a1128;
+  --navy-soft:    #0f1a3a;
+  --purple-vivid: #7c3aed;
+  --purple-mid:   #6d28d9;
+  --purple-glow:  #a855f7;
+  --indigo:       #4f46e5;
+  --cyan-accent:  #22d3ee;
+  --pink-accent:  #e879f9;
+
+  --glass-bg:     rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-hover:  rgba(255, 255, 255, 0.09);
+  --glass-shine:  rgba(255, 255, 255, 0.14);
+
+  --text-primary:   #f0f4ff;
+  --text-secondary: rgba(200, 210, 255, 0.65);
+  --text-muted:     rgba(160, 175, 220, 0.40);
+
+  --success: #34d399;
+  --danger:  #f87171;
+
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --blur:      20px;
+
+  --shadow-card:    0 8px 32px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.06) inset;
+  --shadow-btn:     0 4px 20px rgba(124, 58, 237, 0.5);
+  --shadow-glow:    0 0 40px rgba(124, 58, 237, 0.25);
+  --shadow-pending: 0 0 16px rgba(34, 211, 238, 0.15);
+  --shadow-done:    0 0 16px rgba(52, 211, 153, 0.15);
+}
+
+/**
+ * 2. CORE RESET & BASE STYLES
+ * Standardizing the box model across all browsers to prevent 
+ * layout shifts. I've set 'scroll-behavior: smooth' for 
+ * a premium feel during navigation.
+ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ul { list-style: none; }
+button { cursor: pointer; border: none; background: none; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  animation: drift 18s ease-in-out infinite alternate;
+  display: none;
+}
+
+
+.orb-1 {
+  width: 520px; height: 520px;
+  background: radial-gradient(circle, #6d28d9 0%, transparent 70%);
+  top: -160px; left: -120px;
+  animation-duration: 20s;
+}
+.orb-2 {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, #4f46e5 0%, transparent 70%);
+  bottom: -100px; right: -80px;
+  animation-duration: 24s;
+  animation-delay: -8s;
+}
+.orb-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, #0e7490 0%, transparent 70%);
+  top: 50%; left: 60%;
+  opacity: 0.30;
+  animation-duration: 16s;
+  animation-delay: -4s;
+}
+@keyframes drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(30px, 40px) scale(1.08); }
+}
+
+/**
+ * 3. THE VISUAL ATMOSPHERE
+ * Grid-Overlay: A repeating linear gradient that mimics a digital canvas.
+ * BG-Orbs: Large, blurred circles that 'drift' using keyframe animations 
+ * to make the background feel alive rather than static.
+ */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 58, 237, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app-wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 28px 18px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/**
+ * 4. COMPONENT ARCHITECTURE (GLASS CARDS)
+ * I use 'backdrop-filter' to blur the background behind elements.
+ * This is the 'Glassmorphism' technique that gives the app its modern look.
+ */
+
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.3s ease;
+}
+.glass-card:hover { border-color: var(--glass-shine); }
+
+.header-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 22px;
+}
+.brand { display: flex; align-items: center; gap: 11px; }
+.brand-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--purple-vivid), var(--indigo));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+  flex-shrink: 0;
+}
+.brand-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #c4b5fd, #a5f3fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.date-badge {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.stat-card {
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(124,58,237,0.12), transparent);
+  pointer-events: none;
+}
+.stat-card--pending::before { background: linear-gradient(135deg, rgba(34,211,238,0.12), transparent); }
+.stat-card--done::before    { background: linear-gradient(135deg, rgba(52,211,153,0.12), transparent); }
+
+.stat-number {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, #c4b5fd, #a5f3fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.stat-card--pending .stat-number {
+  background: linear-gradient(135deg, #67e8f9, #818cf8);
+  -webkit-background-clip: text; background-clip: text;
+}
+.stat-card--done .stat-number {
+  background: linear-gradient(135deg, #6ee7b7, #34d399);
+  -webkit-background-clip: text; background-clip: text;
+}
+.stat-number.pop { transform: scale(1.25); }
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.input-card { padding: 16px 18px; }
+.input-row { display: flex; gap: 10px; align-items: center; }
+
+.input-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Uniform distance between Priority and Input */
+}
+
+.input-icon {
+    display: none !important;
+}
+.task-input {
+    width: 100%;
+    padding: 13px 18px; /* Balanced padding now that icon is removed */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.25s ease;
+    margin: 0 !important;
+}
+.task-input::placeholder { color: var(--text-muted); }
+.task-input:focus {
+  border-color: rgba(124, 58, 237, 0.6);
+  background: rgba(124, 58, 237, 0.07);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+}
+.input-wrapper:focus-within .input-icon { color: var(--purple-glow); }
+
+/**
+ * 5. INTERACTIVE ELEMENTS (BUTTONS & INPUTS)
+ * Add-Button: Features a sliding 'shine' effect (::before) on hover.
+ * Task-Input: Uses :focus-within to highlight the entire wrapper 
+ * when the user starts typing, improving focus.
+ */
+.add-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 13px 20px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--purple-vivid), var(--indigo));
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-btn);
+  white-space: nowrap;
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.add-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  transition: left 0.4s ease;
+}
+.add-btn:hover::before { left: 160%; }
+.add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(124, 58, 237, 0.65);
+  filter: brightness(1.1);
+}
+.add-btn:active { transform: translateY(0) scale(0.97); }
+
+.filter-tabs {
+    display: flex;
+    padding: 6px;
+    gap: 4px;
+    position: relative;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    width: 100%; /* Ensures it stretches to match other cards */
+    max-width: 100%; 
+    box-sizing: border-box; /* Crucial for alignment */
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.25s, background 0.25s;
+  z-index: 1;
+  position: relative;
+}
+.tab-btn.active { color: var(--text-primary); }
+.tab-btn:hover:not(.active) {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.05);
+}
+
+.tab-indicator {
+    position: absolute;
+    top: 6px; 
+    left: 6px;
+    height: calc(100% - 12px);
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(79, 70, 229, 0.2));
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    /* This ensures it doesn't look like a line when width is 0 */
+    opacity: 0; 
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.3s ease, opacity 0.2s;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.tab-indicator[style*="width"] {
+    opacity: 1;
+}
+
+.task-section { min-height: 120px; display: flex; flex-direction: column; }
+.task-list { display: flex; flex-direction: column; gap: 10px; }
+
+.task-item {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, opacity 0.3s;
+  animation: slideIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+  position: relative;
+  overflow: hidden;
+}
+.task-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--purple-glow), var(--indigo));
+  border-radius: 3px 0 0 3px;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.task-item:hover { border-color: var(--glass-shine); transform: translateX(3px); box-shadow: var(--shadow-glow); }
+.task-item:hover::before { opacity: 1; }
+.task-item.completed { opacity: 0.55; }
+.task-item.completed::before { background: linear-gradient(180deg, var(--success), #059669); opacity: 1; }
+.task-item.completed .task-text { text-decoration: line-through; color: var(--text-muted); }
+/**
+ * 6. DYNAMIC ANIMATIONS (TASK LIFECYCLE)
+ * slideIn: Uses a 'cubic-bezier' curve for a bouncy, organic entrance.
+ * slideOut: Used during deletion to smoothly collapse the element 
+ * instead of a jarring jump in the list.
+ */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-12px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes slideOut {
+  from { opacity: 1; transform: translateX(0) scale(1); max-height: 80px; margin-bottom: 10px; }
+  to   { opacity: 0; transform: translateX(20px) scale(0.96); max-height: 0; margin-bottom: 0; padding: 0; }
+}
+.task-item.removing { animation: slideOut 0.3s ease forwards; }
+
+.task-checkbox {
+  width: 22px; height: 22px;
+  border-radius: 7px;
+  border: 2px solid rgba(124,58,237,0.45);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  background: rgba(124,58,237,0.08);
+}
+.task-checkbox:hover { border-color: var(--purple-glow); background: rgba(124,58,237,0.18); transform: scale(1.1); }
+.task-checkbox.checked { background: linear-gradient(135deg, var(--success), #059669); border-color: var(--success); }
+.task-checkbox svg { opacity: 0; transform: scale(0.5); transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+.task-checkbox.checked svg { opacity: 1; transform: scale(1); }
+
+.task-text {
+  flex: 1;
+  font-size: 0.93rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  word-break: break-word;
+  line-height: 1.5;
+  transition: color 0.25s;
+}
+
+.delete-btn {
+  width: 30px; height: 30px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  transition: color 0.2s, background 0.2s, transform 0.2s;
+  flex-shrink: 0;
+  opacity: 0;
+}
+.task-item:hover .delete-btn { opacity: 1; }
+.delete-btn:hover { color: var(--danger); background: rgba(248,113,113,0.12); transform: scale(1.15); }
+
+.empty-state {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 48px 24px;
+  text-align: center;
+  opacity: 0.7;
+  animation: fadeIn 0.4s ease;
+}
+.empty-state.visible { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 0.7; } }
+
+.empty-icon {
+  width: 72px; height: 72px;
+  border-radius: 20px;
+  background: rgba(124,58,237,0.1);
+  border: 1px solid rgba(124,58,237,0.2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--purple-glow);
+  margin-bottom: 6px;
+}
+.empty-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-secondary); }
+.empty-sub { font-size: 0.85rem; color: var(--text-muted); }
+
+.footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 4px 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.clear-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.clear-btn:hover { color: var(--danger); border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.08); }
+
+/* Interactive Cursor Glow */
+#cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 500px;  /* Size of your flashlight beam */
+    height: 500px;
+    /* A sharper gradient makes it feel more like a torch */
+    background: radial-gradient(
+        circle, 
+        rgba(124, 58, 237, 0.18) 0%, 
+        rgba(124, 58, 237, 0.05) 40%, 
+        transparent 70%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0; /* Keep it behind the cards */
+    transform: translate(-50%, -50%);
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease;
+}
+
+body:hover #cursor-glow {
+    opacity: 1;
+}
+
+#sparkle-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0; /* Behind the app but above the grid */
+}
+
+.sparkle {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--purple-glow);
+    animation: float-sparkle var(--duration) linear infinite;
+}
+
+@keyframes float-sparkle {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.80;
+    }
+    80% {
+        opacity: 0.90;
+    }
+    100% {
+        transform: translateY(-100vh) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* Priority Select (Injected via JS) */
+.priority-select {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    margin-right: 12px;
+    outline: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    transition: background 0.3s;
+}
+.priority-select:focus { background: rgba(124, 58, 237, 0.1); border-color: var(--purple-glow); }
+
+/* Priority Tags inside the List */
+.priority-tag {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 100px;
+    margin-left: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+}
+
+.prio-high   { background: rgba(248, 113, 113, 0.15); color: var(--danger); border: 1px solid rgba(248, 113, 113, 0.3); }
+.prio-medium { background: rgba(124, 58, 237, 0.15); color: var(--purple-glow); border: 1px solid rgba(124, 58, 237, 0.3); }
+.prio-low    { background: rgba(34, 211, 238, 0.15); color: var(--cyan-accent); border: 1px solid rgba(34, 211, 238, 0.3); }
+/**
+ * 7. RESPONSIVE ENGINE
+ * Mobile-First logic: On screens under 640px, the layout switches 
+ * to 'column' mode. This optimizes the UI for thumb-reach and 
+ * prevents text from becoming too small.
+ */
+@media (max-width: 480px) {
+  .app-wrapper { padding: 16px 12px 40px; gap: 12px; }
+  .add-btn span { display: none; }
+  .add-btn { padding: 13px 16px; }
+  .brand-name { font-size: 1.15rem; }
+  .stat-number { font-size: 1.6rem; }
+  .header-meta { display: none; }
+}
+
+/* --- RESPONSIVE DESIGN (Mobile Optimization) --- */
+
+@media (max-width: 640px) {
+    .app-wrapper {
+        padding: 12px 12px 30px; /* Reduced padding for more screen real estate */
+        gap: 10px;
+    }
+
+    /* 1. Header & Brand */
+    .brand-name {
+        font-size: 1.1rem; /* Slightly smaller to prevent crowding */
+    }
+    
+    .date-badge {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+    }
+
+    /* 2. Stats Dashboard */
+    .stats-row {
+        gap: 8px; /* Tighter gaps for small screens */
+    }
+    
+    .stat-card {
+        padding: 12px 8px;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+
+    /* 3. The Input Row (The most important part) */
+    .input-row {
+        flex-direction: column; /* Stack elements for better thumb reach */
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .input-wrapper {
+        width: 100%;
+        gap: 8px;
+    }
+
+    .priority-select {
+        min-width: 80px;
+        font-size: 0.75rem;
+        padding: 11px 6px; /* Match height of input */
+    }
+
+    .add-btn {
+        width: 100%; /* Full width button is easier to tap on mobile */
+        justify-content: center;
+        padding: 14px;
+    }
+
+    /* 4. Filter Tabs */
+    .tab-btn {
+        font-size: 0.75rem;
+        padding: 10px 5px;
+    }
+
+    /* 5. Task Items */
+    .task-item {
+        padding: 12px;
+    }
+
+    .task-text {
+        font-size: 0.85rem;
+    }
+
+    .priority-tag {
+        font-size: 0.55rem;
+        padding: 1px 6px;
+    }
+
+    /* Hide unnecessary elements on mobile to keep it clean */
+    .header-meta {
+        display: block; /* Keep the date, but we could hide it if it overlaps */
+    }
+    
+    /* Ensure the "Torch" glow isn't too distracting on touch screens */
+    #cursor-glow {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+/* Extra small phones (iPhone SE, etc.) */
+@media (max-width: 360px) {
+    .stat-label {
+        font-size: 0.6rem;
+    }
+    .brand-icon {
+        width: 32px;
+        height: 32px;
+    }
+}

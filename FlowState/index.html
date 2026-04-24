@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FlowState — Task Manager</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <div id="cursor-glow"></div> 
+  <div class="grid-overlay"></div>
+  <div id="sparkle-container"></div>
+
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <div class="app-wrapper">
+
+    <header class="glass-card header-card">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <span class="brand-name">FlowState</span>
+      </div>
+      <div class="header-meta">
+        <div class="date-badge" id="dateBadge">Loading...</div>
+      </div>
+    </header>
+
+    <div class="stats-row">
+      <div class="glass-card stat-card">
+        <span class="stat-number" id="totalCount">0</span>
+        <span class="stat-label">Total</span>
+      </div>
+      <div class="glass-card stat-card stat-card--pending">
+        <span class="stat-number" id="pendingCount">0</span>
+        <span class="stat-label">Pending</span>
+      </div>
+      <div class="glass-card stat-card stat-card--done">
+        <span class="stat-number" id="doneCount">0</span>
+        <span class="stat-label">Completed</span>
+      </div>
+    </div>
+
+    <div class="glass-card input-card">
+      <div class="input-row">
+        <div class="input-wrapper">
+          <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <input
+            type="text"
+            id="taskInput"
+            class="task-input"
+            placeholder="What needs to be done?"
+            autocomplete="off"
+            maxlength="120"
+          />
+        </div>
+        <button class="add-btn" id="addBtn" aria-label="Add task">
+          <span>Add Task</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-tabs glass-card">
+      <button class="tab-btn active" data-filter="all">All</button>
+      <button class="tab-btn" data-filter="pending">Pending</button>
+      <button class="tab-btn" data-filter="completed">Completed</button>
+      <div class="tab-indicator"></div>
+    </div>
+
+    <div class="task-section">
+      <ul class="task-list" id="taskList"></ul>
+      
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+          </svg>
+        </div>
+        <p class="empty-title">No tasks here</p>
+        <p class="empty-sub">Add a task above to get into flow</p>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <span>FlowState — Stay in the zone.</span>
+      <button class="clear-btn" id="clearAllBtn">Clear Completed</button>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
