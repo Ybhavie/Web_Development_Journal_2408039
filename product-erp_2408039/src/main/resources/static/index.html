@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product ERP</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <h2>Add New Product</h2>
+    <input type="text" id="name" placeholder="Product Name"><br>
+    <input type="text" id="cat" placeholder="Category"><br>
+    <input type="number" id="price" placeholder="Price"><br>
+    <button onclick="addProduct()">Add Product</button>
+
+    <script>
+        function addProduct() {
+            const data = {
+                productName: document.getElementById('name').value,
+                category: document.getElementById('cat').value,
+                price: document.getElementById('price').value,
+                quantityInStock: 10
+            };
+
+            fetch('/api/products', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            }).then(() => {
+                alert('Product Added Successfully! will be redirected to product list');
+                window.location.href = '/api/products';
+            });
+        }
+    </script>
+</body>
+</html>
