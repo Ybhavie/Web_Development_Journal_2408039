@@ -1,0 +1,101 @@
+/* General Page Styling */
+body {
+    background-color:#191f28; /* Dark background */
+    color: #c9d1d9; /* Light text */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background-color: lenear;
+}
+
+h2, h3 {
+    color: #58a6ff; /* Neon Blue Accent */
+    text-align: center;
+}
+
+/* Section Containers */
+section {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    padding: 25px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Input Fields */
+input[type="text"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #30363d;
+    background-color: #0d1117;
+    color: white;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #58a6ff;
+    box-shadow: 0 0 5px #58a6ff;
+}
+
+/* Buttons */
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #238636; /* Green success color */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #2ea043;
+    box-shadow: 0 0 10px #2ea043;
+}
+
+/* List Styling (Part A) */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background: #21262d;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+li:hover {
+    background: #2d333b;
+    color: #ff7b72; /* Reddish tint on hover to signify deletion */
+    border-left: 4px solid #f85149;
+}
+
+/* Output Box (Part B) */
+.result-box {
+    background: #0d1117;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 6px;
+    border-left: 5px solid #58a6ff;
+    font-family: 'Courier New', Courier, monospace;
+    color: #8b949e;
+}
+
+strong {
+    color: #58a6ff;
+}
